@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import $ from "jquery"
+import {postRequest} from "./RequestApi"
 
 function AddTodo({ onCreate }){
     const [value, setValue] = useState("");
@@ -13,21 +14,23 @@ function AddTodo({ onCreate }){
         }
 
         if(value.trim()){
-            $.ajax({
-                url: "http://localhost:8080/todolist/",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(todo),
+            postRequest({
+                url: "todolist" ,
                 complete: function(serverResponse){
-                    console.log(serverResponse);
                     if(serverResponse.status === 201){
                         alert("Todo added to database")
                     }
-                    if(serverResponse.status === 400){
-                        // alert(serverResponse.responseJSON.message);
-                    }
                 }
-            });
+            }, todo)
+                // complete: function(serverResponse){
+                //     console.log(serverResponse);
+                //     if(serverResponse.status === 201){
+                //         alert("Todo added to database")
+                //     }
+                //     if(serverResponse.status === 400){
+                //         // alert(serverResponse.responseJSON.message);
+                //     }
+                // }
             onCreate(value)
             setValue("")
         }

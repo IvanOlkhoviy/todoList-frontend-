@@ -3,31 +3,24 @@ import TodoList from "./Todo/TodoList.js";
 import Context from "./context";
 import AddTodo from "./Todo/AddTodo";
 import $ from 'jquery';
-
-
-
-
+import { getRequest } from "./Todo/RequestApi"
 
 
 
 function App() {
   const [todos, setTodos] = React.useState([]);
-  
-  
+
   useEffect(()=>{
-    $.ajax({
-      url: "http://localhost:8080/todolist/page",
-      method: "GET",
-      contentType: "application/json",
+    getRequest({
+      url:"todolist/page",
       complete: function(serverResponse){
         let todos = serverResponse.responseJSON;
-        console.log(todos.content)
         setTodos(todos.content) 
       }
     })
-                
-  },[])
-
+  }, [])
+  
+  
   function toggleTodo(id){
     setTodos(
       todos.map(todo =>{
